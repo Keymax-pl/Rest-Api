@@ -24,24 +24,28 @@ router.route('/seats/:id').get((req, res) => {
 });
   
 router.route('/seats').post((req, res) => {
-  const { day, seat, client, email } = req.body
-  if ( !day || !seat || !client || !email ) {
-    res.status(404).json({ message: 'Complete all data' });
-  }else{
-    const newseat = { id: uuidv4(), day, seat, client, email }
-    db.seats.push(newseat)
-    res.json({ message: 'ok'});
+  const { day, seat, client, email } = req.body;
+
+  if (!day || !seat || !client || !email) {
+    return res.status(400).json({ message: 'Complete all data' });
   }
+  const isSeatTaken = db.seats.some(existingSeat => existingSeat.seat === seat && existingSeat.day === day);
+  if (isSeatTaken) {
+    return res.status(409).json({ message: 'The slot is already taken...' });
+  }
+  const newSeat = { id: uuidv4(), day, seat, client, email };
+  db.seats.push(newSeat);
+  return res.json({ message: 'ok' });
 });
+
   
 router.route('/seats/:id').put((req, res) => {
-  const { id, day, seat, client, email } = req.body
+  const { day, seat, client, email } = req.body
   const seatId = parseInt(req.params.id);
   const seatIndex = db.seats.find(seat => seat.id === seatId);
   if ( !seatIndex ) {
     res.status(404).json({ message: 'seat not found' })
   }else{
-    seatIndex.id = id;
     seatIndex.day = day;
     seatIndex.seat = seat;
     seatIndex.client = client;
