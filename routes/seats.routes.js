@@ -24,8 +24,8 @@ router.route('/seats/:id').get((req, res) => {
 });
   
 router.route('/seats').post((req, res) => {
-  const { id, day, seat, client, email } = req.body
-  if ( !id || !day || !seat || !client || !email ) {
+  const { day, seat, client, email } = req.body
+  if ( !day || !seat || !client || !email ) {
     res.status(404).json({ message: 'Complete all data' });
   }else{
     const newseat = { id: uuidv4(), day, seat, client, email }
