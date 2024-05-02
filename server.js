@@ -38,7 +38,9 @@ app.use((req, res) => {
 });
 
 // connects our backend code with the database
-mongoose.connect('mongodb://0.0.0.0:27017/NewWaveDB', { useNewUrlParser: true });
+mongoose.connect(
+  'mongodb+srv://Keymax:Agentcsgo69@cluster0.ntrkrfl.mongodb.net/NewWaveDB?retryWrites=true&w=majority&appName=Cluster0',
+  { useNewUrlParser: true });
 const db = mongoose.connection;
 
 db.once('open', () => {
